@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cloudflare-dashboard canvas: very light neutral grey, near-black ink */
+  --background: #f7f8f9;
+  --foreground: #1d1f21;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-thai: var(--font-anuphan);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/**
+ * Accent remap — the whole admin uses `purple-*` utilities for its accent.
+ * Rather than touch every file, we redefine the purple scale to Cloudflare's
+ * dashboard blue ramp. `purple-600` (primary buttons/links) → #0051c8,
+ * `purple-700` (hover) → #00409e. Opacity modifiers (e.g. purple-500/10) still work.
+ */
+@theme {
+  --color-purple-50: #eef4fd;
+  --color-purple-100: #d9e7fb;
+  --color-purple-200: #b3cef6;
+  --color-purple-300: #7aa9ee;
+  --color-purple-400: #3f80e0;
+  --color-purple-500: #1a63d0;
+  --color-purple-600: #0051c8;
+  --color-purple-700: #00409e;
+  --color-purple-800: #06337a;
+  --color-purple-900: #0a2c63;
+  --color-purple-950: #071c40;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), var(--font-anuphan), system-ui, sans-serif;
+}
+
+.dark body {
+  background: #0b0f16;
+  color: #f4f5f7;
+}
+
+/* ==========================================================================
+   Hidden Scrollbars (Smooth scrolling with hidden scrollbar track & thumb)
+   ========================================================================== */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE & Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html,
+body {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Native select/reset button baseline — Cloudflare-style blue focus ring */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgb(26 99 208 / 0.6);
+  outline-offset: 1px;
+}
+
+/* ==========================================================================
+   Tactile & Subtle Elevated Button Classes (Cloudflare / Modern 3D Bevel)
+   ========================================================================== */
+
+/* Primary Elevated Button (Vibrant Cloudflare Blue) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(180deg, #2b7fff 0%, #1565e6 100%);
+  border: 1px solid #1565e6;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3b87ff 0%, #1a6ef5 100%);
+  border-color: #1a6ef5;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(27, 100, 242, 0.2);
+}
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.99);
+  filter: brightness(0.96);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Elevated Button (Clean Surface with Uniform Border) */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #27272a;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+.dark .btn-secondary {
+  color: #f4f4f5;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: #f4f4f5;
+  border-color: #a1a1aa;
+}
+.dark .btn-secondary:hover:not(:disabled) {
+  background: #27272a;
+  border-color: #52525b;
+}
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.99);
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Danger Elevated Button (Rose Red) */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(180deg, #f43f5e 0%, #e11d48 100%);
+  border: 1px solid #e11d48;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+.btn-danger:hover:not(:disabled) {
+  background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+  border-color: #be123c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(225, 29, 72, 0.2);
+}
+.btn-danger:active:not(:disabled) {
+  transform: scale(0.99);
+}
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
